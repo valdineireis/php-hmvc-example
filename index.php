@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 global $currentModule;
 
 spl_autoload_register(function ($class) {
