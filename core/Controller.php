@@ -11,7 +11,7 @@ class Controller
 
 	public function loadTemplate($viewName, $viewData = array()) {
 		extract($viewData);
-		include 'templates/default.php';
+		include 'templates/default/index.php';
 	}
 
 	public function loadViewInTemplate($viewName, $viewData) {
