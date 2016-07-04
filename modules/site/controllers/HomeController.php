@@ -10,7 +10,7 @@ class HomeController extends Controller
 			'name' => $usuario->getName()
 		);
 
-		$this->loadView('home', $dados);
+		$this->loadTemplate('home', $dados);
 	}
 
 	public function parametros($nome, $sobrenome) {
