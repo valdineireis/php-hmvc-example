@@ -1,3 +1,1 @@
-<h1>Meu nome eh <?php echo $name; ?></h1>
-
-
+<h1>Meu nome é <?php echo $name; ?></h1>
