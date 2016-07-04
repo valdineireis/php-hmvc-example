@@ -5,9 +5,10 @@ class Core
 	public function run() {
 		global $currentModule;
 
-		$url = substr($_SERVER['PHP_SELF'], 10);
+		$url = end(explode('index.php', $_SERVER['PHP_SELF']));
+		$params = array();
 
-		if (!empty($url) && $url != 'index.php') {
+		if (!empty($url)) {
 			
 			$url = explode('/', $url);
 			array_shift($url);
@@ -26,6 +27,11 @@ class Core
 				$currentAction = 'index';
 			}
 
+			if (count($url) > 3) {
+				$params = $url;
+				array_splice($params, 0, 3);
+			}
+
 		} else {
 			$currentModule = 'site';
 			$currentController = 'HomeController';
@@ -35,6 +41,6 @@ class Core
 		require_once 'core/Controller.php';
 
 		$c = new $currentController();
-		$c->$currentAction();
+		call_user_func_array(array($c, $currentAction), $params);
 	}
 }

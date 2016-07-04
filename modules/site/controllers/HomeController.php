@@ -12,4 +12,9 @@ class HomeController extends Controller
 
 		$this->loadView('home', $dados);
 	}
+
+	public function parametros($nome, $sobrenome) {
+		echo "<br>";
+		echo "Nome: ".$nome." ".$sobrenome;
+	}
 }
