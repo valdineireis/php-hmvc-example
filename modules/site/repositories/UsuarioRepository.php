@@ -2,20 +2,16 @@
 
 class UsuarioRepository extends RepositoryBase
 {
-	public function __construct() {
-		parent::__construct();
-	}
-
 	public function select($quantidade = 0) {
 		$sql = "SELECT * FROM usuarios ";
 
 		if ($quantidade > 0) {
 			$sql .= "LIMIT :quantidade";
-			$sql = $this->db->prepare($sql);
+			$sql = self::getConnection()->prepare($sql);
 			$sql->bindParam(':quantidade', $qtd);
 			$qtd = $quantidade;
 		} else {
-			$sql = $this->db->prepare($sql);
+			$sql = self::getConnection()->prepare($sql);
 		}
 
 		$sql->execute();
