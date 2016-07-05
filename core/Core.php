@@ -5,7 +5,8 @@ class Core
 	public function run() {
 		global $currentModule;
 
-		$url = end(explode('index.php', $_SERVER['PHP_SELF']));
+		$url = explode('index.php', $_SERVER['PHP_SELF']);
+		$url = end($url);
 		$params = array();
 
 		if (!empty($url)) {
