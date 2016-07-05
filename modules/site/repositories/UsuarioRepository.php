@@ -10,10 +10,15 @@ class UsuarioRepository extends RepositoryBase
 		$sql = "SELECT * FROM usuarios ";
 
 		if ($quantidade > 0) {
-			$sql .= "LIMIT ".$quantidade;
+			$sql .= "LIMIT :quantidade";
+			$sql = $this->db->prepare($sql);
+			$sql->bindParam(':quantidade', $qtd);
+			$qtd = $quantidade;
+		} else {
+			$sql = $this->db->prepare($sql);
 		}
 
-		$sql = $this->db->query($sql);
+		$sql->execute();
 
 		$usuarios = array();
 
