@@ -14,7 +14,7 @@ class HomeController extends Controller
 
 		$dados = array(
 			'name' => $usuario->getName(),
-			'usuarios' => $this->usuarioRepository->selectAll()
+			'usuarios' => $this->usuarioRepository->select()
 		);
 
 		$this->loadTemplate('home', $dados);

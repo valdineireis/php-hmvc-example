@@ -6,10 +6,21 @@ class UsuarioRepository extends RepositoryBase
 		parent::__construct();
 	}
 
-	public function selectAll() {
-		$sql = "SELECT * FROM usuarios";
+	public function select($quantidade = 0) {
+		$sql = "SELECT * FROM usuarios ";
+
+		if ($quantidade > 0) {
+			$sql .= "LIMIT ".$quantidade;
+		}
+
 		$sql = $this->db->query($sql);
 
-		return $sql->fetchAll();
+		$usuarios = array();
+
+		if ($sql->rowCount() > 0) {
+			$usuarios = $sql->fetchAll(PDO::FETCH_OBJ);
+		}
+
+		return $usuarios;
 	}
 }
