@@ -13,14 +13,14 @@ abstract class RepositoryBase
 
     /** Retorna um objeto PDO Singleton Pattern. */
     protected static function getConnection() {
-        return self::Conectar();
+        return self::conectar();
     }
 
     /**
      * Conecta com o banco de dados com o pattern singleton.
      * Retorna um objeto PDO!
      */
-    private static function Conectar() {
+    private static function conectar() {
 		global $config;
 
         try {
