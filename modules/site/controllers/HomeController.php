@@ -20,7 +20,7 @@ class HomeController extends Controller
 		$this->loadTemplate('home', $dados);
 	}
 
-	public function parametros($nome, $sobrenome) {
+	public function parametros($nome='', $sobrenome='') {
 		echo "<br>";
 		echo "Nome: ".$nome." ".$sobrenome;
 	}
