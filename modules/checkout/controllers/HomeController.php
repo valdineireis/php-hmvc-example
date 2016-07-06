@@ -1,6 +1,6 @@
 <?php
 
-class CheckoutController extends Controller
+class HomeController extends Controller
 {
 	private $produtoRepository;
 
@@ -16,9 +16,9 @@ class CheckoutController extends Controller
 			$prods = $_SESSION['checkout'];
 		}
 
-		$dados = $this->produtoRepository->selectIn($prods);
+		$dados["produtos"] = $this->produtoRepository->selectIn($prods);
 
-		$this->loadView('checkout', $dados);
+		$this->loadTemplate('checkout', $dados);
 	}
 
 	public function add($id = '') {
@@ -27,7 +27,7 @@ class CheckoutController extends Controller
 				$_SESSION['checkout'] = array();
 			}
 
-			$_SESSION['checkout'][] = $id;
+			$_SESSION['checkout'][] = addslashes($id);
 
 			header("Location: /checkout");
 		}
