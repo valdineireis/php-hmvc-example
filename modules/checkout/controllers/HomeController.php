@@ -21,15 +21,15 @@ class HomeController extends Controller
 		$this->loadTemplate('checkout', $dados);
 	}
 
-	public function add($id = '') {
-		if (!empty($id)) {
+	public function add($id = 0) {
+		if (is_numeric($id) && $id > 0) {
 			if (!isset($_SESSION['checkout'])) {
 				$_SESSION['checkout'] = array();
 			}
 
 			$_SESSION['checkout'][] = addslashes($id);
-
-			header("Location: /checkout");
 		}
+
+		header("Location: /checkout");
 	}
 }
