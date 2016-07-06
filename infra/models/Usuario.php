@@ -1,10 +1,9 @@
 <?php
 
-class Usuario
+class Usuario extends Entity implements EntityContract
 {
 	private static $salt = "security_token_201607051606";
 
-	private $id;
 	private $name;
 	private $email;
 	private $senha;
@@ -15,6 +14,10 @@ class Usuario
 
 	public function __contruct() {
 		$this->perfis = array();
+	}
+
+	public static function getTableName() {
+		return "usuarios";
 	}
 
 	public function getName() {

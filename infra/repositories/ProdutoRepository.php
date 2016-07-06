@@ -3,7 +3,7 @@
 class ProdutoRepository extends RepositoryBase
 {
 	public function __construct() {
-		parent::__construct("produtos");
+		parent::__construct(Produto::getTableName());
 	}
 
 	/**
