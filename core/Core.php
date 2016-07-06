@@ -41,7 +41,18 @@ class Core
 
 		require_once 'core/Controller.php';
 
+		if (!class_exists($currentController)) {
+			$currentController = 'ErroController';
+			require_once 'core/ErroController.php';
+			$currentModule = '_erros';
+		}
+
 		$c = new $currentController();
-		call_user_func_array(array($c, $currentAction), $params);
+
+		if (!method_exists($c, $currentAction)) {
+			header("Location: /".$currentModule."/".lcfirst(str_replace("Controller", "", $currentController)));
+		} else {
+			call_user_func_array(array($c, $currentAction), $params);
+		}
 	}
 }
