@@ -17,6 +17,7 @@
 			<td><?php echo utf8_encode($produto->nome) ?></td>
 			<td><?php echo 'R$ '.$produto->preco ?></td>
 			<td>
+				<a href="/checkout/home/remove/<?php echo $produto->id ?>">Remover</a>
 			</td>
 		</tr>
 		<?php $subtotal += $produto->preco; ?>

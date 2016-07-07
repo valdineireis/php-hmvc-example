@@ -32,4 +32,18 @@ class HomeController extends Controller
 
 		header("Location: /checkout");
 	}
+
+	public function remove($id = 0) {
+		if (is_numeric($id) && $id > 0) {
+			
+			foreach ($_SESSION['checkout'] as $chave => $valor) {
+				if ($id == $valor) {
+					unset($_SESSION['checkout'][$chave]);
+				}
+			}
+
+		}
+
+		header("Location: /checkout");
+	}
 }
