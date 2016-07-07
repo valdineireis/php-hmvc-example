@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Classe central de controle e redirecionamento das requisições.
+ *
+ * Valdinei Reis valdinei@nocodigo.com
+ */
 class Core
 {
 	private $currentController;
@@ -7,6 +12,7 @@ class Core
 	private $params;
 
 	public function __construct() {
+		require_once 'core/Controller.php';
 		$this->currentController = 'HomeController';
 		$this->currentAction = 'index';
 		$this->params = array();
@@ -14,14 +20,9 @@ class Core
 
 	public function run() {
 		$this->extractUrl();
-
-		require_once 'core/Controller.php';
-
 		$this->verifyController();
 		$this->verifyMethod();
-
-		$c = new $this->currentController();
-		call_user_func_array(array($c, $this->currentAction), $this->params);
+		$this->execute();
 	}
 
 	private function extractUrl() {
@@ -73,6 +74,11 @@ class Core
 			}
 			exit;
 		}
+	}
+
+	private function execute() {
+		$c = new $this->currentController();
+		call_user_func_array(array($c, $this->currentAction), $this->params);
 	}
 
 	private function getCurrentModule() {
