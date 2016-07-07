@@ -17,7 +17,7 @@ class Usuario extends Entity implements EntityContract
 		$this->perfis = array();
 	}
 
-	public static function getTableName() 
+	public final static function getTableName() 
 	{
 		return "usuarios";
 	}

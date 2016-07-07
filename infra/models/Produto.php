@@ -7,7 +7,7 @@ class Produto extends Entity implements EntityContract
 	private $imagem;
 	private $descricao;
 
-	public static function getTableName() 
+	public final static function getTableName() 
 	{
 		return "produtos";
 	}
