@@ -2,14 +2,15 @@
 
 class ProdutoRepository extends RepositoryBase
 {
-	public function __construct() {
+	public function __construct() 
+	{
 		parent::__construct(Produto::getTableName());
 	}
 
 	/**
 	 * Seleciona todos os produtos com base nos IDs (código).
 	 *
-	 * @var ids lista de códigos de identificação dos produtos.
+	 * @param array $ids lista de códigos de identificação dos produtos.
 	 */
 	public function selectIn(array $ids = array()) {
 		$produtos = array();
@@ -22,7 +23,6 @@ class ProdutoRepository extends RepositoryBase
 			if ($sql->rowCount() > 0) {
 				$produtos = $sql->fetchAll(PDO::FETCH_OBJ);
 			}
-
 		}
 
 		return $produtos;

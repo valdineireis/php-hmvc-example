@@ -3,8 +3,10 @@ session_start();
 
 require 'config.php';
 
-spl_autoload_register(function ($class) {
+spl_autoload_register(function ($class) 
+{
 	global $currentModule;
+
 	if (strpos($class, 'Controller') > -1) {
 		if (file_exists('modules/'.$currentModule.'/controllers/'.$class.'.php')) {
 			require_once 'modules/'.$currentModule.'/controllers/'.$class.'.php';

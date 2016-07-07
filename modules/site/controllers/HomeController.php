@@ -4,11 +4,13 @@ class HomeController extends Controller
 {
 	private $usuarioRepository;
 
-	public function __construct() {
+	public function __construct() 
+	{
 		$this->usuarioRepository = new UsuarioRepository();
 	}
 
-	public function index() {
+	public function index() 
+	{
 		$usuario = new Usuario();
 		$usuario->setName('Valdinei');
 
@@ -20,7 +22,8 @@ class HomeController extends Controller
 		$this->loadTemplate('home', $dados);
 	}
 
-	public function parametros($nome='', $sobrenome='') {
+	public function parametros($nome='', $sobrenome='') 
+	{
 		echo "<br>";
 		echo "Nome: ".$nome." ".$sobrenome;
 	}

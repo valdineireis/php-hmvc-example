@@ -14,12 +14,14 @@ abstract class RepositoryBase
 	/** @var Nome da tabela do banco de dados */
 	private $entity;
 
-	public function __construct($entity) {
+	public function __construct($entity) 
+	{
 		$this->entity = $entity;
 	}
 
     /** Retorna um objeto PDO Singleton Pattern. */
-    protected static function getConnection() {
+    protected static function getConnection() 
+	{
         return self::conectar();
     }
 
@@ -27,7 +29,8 @@ abstract class RepositoryBase
      * Conecta com o banco de dados com o pattern singleton.
      * Retorna um objeto PDO!
      */
-    private static function conectar() {
+    private static function conectar() 
+	{
 		global $config;
 
         try {
@@ -48,10 +51,11 @@ abstract class RepositoryBase
 	/**
 	 * Seleciona todos os dados da tabela no banco de dados.
 	 *
-	 * @var quantidade número máximo de resultados, se for igual a 0, retorna todos os registros.
-	 * @var rand se preenchido com o valor TRUE, retorna resultados aleatórios.
+	 * @param int $quantidade número máximo de resultados, se for igual a 0, retorna todos os registros.
+	 * @param bool $rand se preenchido com o valor TRUE, retorna resultados aleatórios.
 	 */
-	public function select($quantidade = 0, $rand = false) {
+	public function select($quantidade = 0, $rand = false) 
+	{
 		$sql = "SELECT * FROM {$this->entity} ";
 
 		if ($rand) {

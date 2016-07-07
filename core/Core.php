@@ -11,21 +11,24 @@ class Core
 	private $currentAction;
 	private $params;
 
-	public function __construct() {
+	public function __construct() 
+	{
 		require_once 'core/Controller.php';
 		$this->currentController = 'HomeController';
 		$this->currentAction = 'index';
 		$this->params = array();
 	}
 
-	public function run() {
+	public function run() 
+	{
 		$this->extractUrl();
 		$this->verifyController();
 		$this->verifyMethod();
 		$this->execute();
 	}
 
-	private function extractUrl() {
+	private function extractUrl() 
+	{
 		$url = explode('index.php', $_SERVER['PHP_SELF']);
 		$url = end($url);
 
@@ -56,7 +59,8 @@ class Core
 		}
 	}
 
-	private function verifyController() {
+	private function verifyController() 
+	{
 		if (!class_exists($this->currentController)) {
 			$this->currentController = 'ErroController';
 			require_once 'core/ErroController.php';
@@ -64,7 +68,8 @@ class Core
 		}
 	}
 
-	private function verifyMethod() {
+	private function verifyMethod() 
+	{
 		if (!method_exists($this->currentController, $this->currentAction)) {
 			if ($this->getCurrentModule() == '_erros') {
 				header("Location: /");
@@ -76,17 +81,20 @@ class Core
 		}
 	}
 
-	private function execute() {
+	private function execute() 
+	{
 		$c = new $this->currentController();
 		call_user_func_array(array($c, $this->currentAction), $this->params);
 	}
 
-	private function getCurrentModule() {
+	private function getCurrentModule() 
+	{
 		global $currentModule;
 		return $currentModule;
 	}
 
-	private function setCurrentModule($module = '') {
+	private function setCurrentModule($module = '') 
+	{
 		global $currentModule;
 		$currentModule = $module;
 	}

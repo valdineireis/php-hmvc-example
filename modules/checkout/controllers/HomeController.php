@@ -4,11 +4,13 @@ class HomeController extends Controller
 {
 	private $produtoRepository;
 
-	public function __construct() {
+	public function __construct() 
+	{
 		$this->produtoRepository = new ProdutoRepository();
 	}
 
-	public function index() {
+	public function index() 
+	{
 		$dados = array();
 		$prods = array();
 
@@ -21,7 +23,8 @@ class HomeController extends Controller
 		$this->loadTemplate('checkout', $dados);
 	}
 
-	public function add($id = 0) {
+	public function add($id = 0) 
+	{
 		if (is_numeric($id) && $id > 0) {
 			if (!isset($_SESSION['checkout'])) {
 				$_SESSION['checkout'] = array();
@@ -33,7 +36,8 @@ class HomeController extends Controller
 		header("Location: /checkout");
 	}
 
-	public function remove($id = 0) {
+	public function remove($id = 0) 
+	{
 		if (is_numeric($id) && $id > 0) {
 			
 			foreach ($_SESSION['checkout'] as $chave => $valor) {

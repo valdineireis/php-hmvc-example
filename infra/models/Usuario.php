@@ -12,50 +12,67 @@ class Usuario extends Entity implements EntityContract
 
 	private $perfis;
 
-	public function __contruct() {
+	public function __contruct() 
+	{
 		$this->perfis = array();
 	}
 
-	public static function getTableName() {
+	public static function getTableName() 
+	{
 		return "usuarios";
 	}
 
-	public function getName() {
+	public function getName() 
+	{
 		return $this->name;
 	}
-	public function setName($name) {
+
+	public function setName($name) 
+	{
 		$this->name = $name;
 		return $this;
 	}
 
-	public function getEmail() {
+	public function getEmail() 
+	{
 		return $this->email;
 	}
-	public function setEmail($email) {
+
+	public function setEmail($email) 
+	{
 		$this->email = $email;
 		return $this;
 	}
 
-	public function getSenha() {
+	public function getSenha() 
+	{
 		return $this->senha;
 	}
-	public function setSenha($senha) {
+
+	public function setSenha($senha) 
+	{
 		$this->senha = MD5(self::$salt.$senha);
 		return $this;
 	}
 
-	public function isAtivo() {
+	public function isAtivo() 
+	{
 		return $this->ativo;
 	}
-	public function setAtivo($ativo) {
+
+	public function setAtivo($ativo) 
+	{
 		$this->ativo = $ativo;
 		return $this;
 	}
 
-	public function getDhCadastro() {
+	public function getDhCadastro() 
+	{
 		return $this->dh_cadastro;
 	}
-	public function setDhCadastro($dhCadastro) {
+
+	public function setDhCadastro($dhCadastro) 
+	{
 		$this->dh_cadastro = $dhCadastro;
 		return $this;
 	}
