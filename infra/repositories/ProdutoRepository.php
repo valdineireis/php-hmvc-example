@@ -11,7 +11,7 @@ class ProdutoRepository extends RepositoryBase
 	 *
 	 * @var ids lista de códigos de identificação dos produtos.
 	 */
-	public function selectIn($ids = array()) {
+	public function selectIn(array $ids = array()) {
 		$produtos = array();
 
 		if (count($ids) > 0) {
