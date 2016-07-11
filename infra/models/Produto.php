@@ -2,7 +2,7 @@
 
 class Produto extends Entity implements EntityContract
 {
-	private $name;
+	private $nome;
 	private $preco;
 	private $imagem;
 	private $descricao;

@@ -11,8 +11,10 @@ class ProdutoRepository extends RepositoryBase
 	 * Seleciona todos os produtos com base nos IDs (código).
 	 *
 	 * @param array $ids lista de códigos de identificação dos produtos.
+	 * @return array
 	 */
-	public function selectIn(array $ids = array()) {
+	public function selectIn(array $ids = array())
+	{
 		$produtos = array();
 
 		if (is_array($ids) && count($ids) > 0) {
@@ -26,5 +28,29 @@ class ProdutoRepository extends RepositoryBase
 		}
 
 		return $produtos;
+	}
+
+	/**
+	 * Seleciona um produto com base no ID (código).
+	 *
+	 * @param int $id código de identificação do produto.
+	 * @return array
+	 */
+	public function selectById($id)
+	{
+		$produto = array();
+
+		if ($id > 0) {
+			$sql = "SELECT * FROM {$this->entity} WHERE id = :id";
+			$sql = self::getConnection()->prepare($sql);
+			$sql->bindParam(':id', $id);
+			$sql->execute();
+
+			if ($sql->rowCount() > 0) {
+				$produto = $sql->fetch(PDO::FETCH_OBJ);
+			}
+		}
+
+		return $produto;
 	}
 }
