@@ -25,9 +25,12 @@ class HomeController extends Controller
 			$dados = array(
 				"produto" => $this->produtoRepository->selectById($id)
 			);
-			//print_r($dados);
 
-			$this->loadTemplate('ver-produto', $dados);
+			if (count($dados['produto']) > 0) {
+				$this->loadTemplate('ver-produto', $dados);
+			} else {
+				header("Location: /erro");
+			}
 
 		} else {
 			header("Location: /erro");
