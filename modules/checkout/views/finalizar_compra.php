@@ -26,8 +26,8 @@
 <fieldset>
 	<legend>Informações de Pagamento</legend>
 
-	<?php foreach ($pagamentos as $pg): ?>
-		<input type="radio" name="pg" value="<?php echo $pg->id; ?>" /> <?php echo $pg->nome; ?> <br>
+	<?php foreach ($tipos_pagamentos as $tipo): ?>
+		<input type="radio" name="tipo_pg" value="<?php echo $tipo->id; ?>" /> <?php echo $tipo->nome; ?> <br>
 	<?php endforeach; ?>
 </fieldset>
 <br><br>

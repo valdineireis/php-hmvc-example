@@ -1,12 +1,12 @@
 <?php
 
-class Pagamento extends Entity implements EntityContract
+class TipoPagamento extends Entity implements EntityContract
 {
 	private $nome;
 
 	public final static function getTableName() 
 	{
-		return "pagamentos";
+		return "loja_tipos_pagamentos";
 	}
 
 	public function getNome() 

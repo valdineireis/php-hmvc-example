@@ -3,12 +3,12 @@
 class HomeController extends Controller
 {
 	private $produtoRepository;
-	private $pagamentoRepository;
+	private $tipoPagamentoRepository;
 
 	public function __construct() 
 	{
 		$this->produtoRepository = new ProdutoRepository();
-		$this->pagamentoRepository = new PagamentoRepository();
+		$this->tipoPagamentoRepository = new TipoPagamentoRepository();
 	}
 
 	public function index()
@@ -60,7 +60,7 @@ class HomeController extends Controller
 		);
 		$prods = array();
 
-		$dados['pagamentos'] = $this->pagamentoRepository->select();
+		$dados['tipos_pagamentos'] = $this->tipoPagamentoRepository->select();
 
 		if (isset($_SESSION['checkout'])) {
 			$prods = $_SESSION['checkout'];

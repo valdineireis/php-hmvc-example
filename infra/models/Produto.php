@@ -9,7 +9,7 @@ class Produto extends Entity implements EntityContract
 
 	public final static function getTableName() 
 	{
-		return "produtos";
+		return "loja_produtos";
 	}
 
 	public function getNome() 
