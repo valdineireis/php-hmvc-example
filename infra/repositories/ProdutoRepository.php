@@ -15,8 +15,8 @@ class ProdutoRepository extends RepositoryBase
 	public function selectIn(array $ids = array()) {
 		$produtos = array();
 
-		if (count($ids) > 0) {
-			$sql = "SELECT * FROM produtos WHERE id IN (".implode(',', $ids).")";
+		if (is_array($ids) && count($ids) > 0) {
+			$sql = "SELECT * FROM {$this->entity} WHERE id IN (".implode(',', $ids).")";
 			$sql = self::getConnection()->prepare($sql);
 			$sql->execute();
 

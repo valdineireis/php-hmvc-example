@@ -8,11 +8,11 @@
  */
 abstract class RepositoryBase
 {
-    /** @var PDO */
+    /** @var db PDO */
 	private static $db = null;
 
-	/** @var Nome da tabela do banco de dados */
-	private $entity;
+	/** @var entity Nome da tabela do banco de dados */
+	protected $entity;
 
 	public function __construct($entity) 
 	{
