@@ -3,13 +3,15 @@
 class HomeController extends Controller
 {
 	private $produtoRepository;
+	private $pagamentoRepository;
 
 	public function __construct() 
 	{
 		$this->produtoRepository = new ProdutoRepository();
+		$this->pagamentoRepository = new PagamentoRepository();
 	}
 
-	public function index() 
+	public function index()
 	{
 		$dados = array();
 		$prods = array();
@@ -23,7 +25,7 @@ class HomeController extends Controller
 		$this->loadTemplate('checkout', $dados);
 	}
 
-	public function add($id = 0) 
+	public function add($id = 0)
 	{
 		if (is_numeric($id) && $id > 0) {
 			if (!isset($_SESSION['checkout'])) {
@@ -36,7 +38,7 @@ class HomeController extends Controller
 		header("Location: /checkout");
 	}
 
-	public function remove($id = 0) 
+	public function remove($id = 0)
 	{
 		if (is_numeric($id) && $id > 0) {
 			
@@ -49,5 +51,29 @@ class HomeController extends Controller
 		}
 
 		header("Location: /checkout");
+	}
+
+	public function finalizar() {
+		$dados = array(
+			'pagamentos' => array(),
+			'total' => 0
+		);
+		$prods = array();
+
+		$dados['pagamentos'] = $this->pagamentoRepository->select();
+
+		if (isset($_SESSION['checkout'])) {
+			$prods = $_SESSION['checkout'];
+		}
+
+		if (count($prods) > 0) {
+			$dados['produtos'] = $this->produtoRepository->selectIn($prods);
+
+			foreach ($dados['produtos'] as $prod) {
+				$dados['total'] += $prod->preco;
+			}
+		}
+
+		$this->loadTemplate('finalizar_compra', $dados);
 	}
 }

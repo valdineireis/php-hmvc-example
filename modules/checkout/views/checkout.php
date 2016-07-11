@@ -25,7 +25,7 @@
 		<tr>
 			<td colspan="2" align="right">Subtotal:</td>
 			<td align="left"><?php echo 'R$ '.$subtotal; ?></td>
-			<td></td>
+			<td><a href="/checkout/home/finalizar">Finalizar compra</a></td>
 		</tr>
 	</table>
 <?php endif; ?>
