@@ -4,7 +4,7 @@ class Usuario extends Entity implements EntityContract
 {
 	private static $salt = "security_token_201607051606";
 
-	private $name;
+	private $nome;
 	private $email;
 	private $senha;
 	private $ativo;
@@ -12,8 +12,10 @@ class Usuario extends Entity implements EntityContract
 
 	private $perfis;
 
-	public function __contruct() 
+	public function __contruct()
 	{
+		$this->setAtivo(true);
+		$this->setDhCadastro(date('d-m-Y H:i:s'));
 		$this->perfis = array();
 	}
 
@@ -22,14 +24,19 @@ class Usuario extends Entity implements EntityContract
 		return "usuarios";
 	}
 
-	public function getName() 
+	public function isValido()
 	{
-		return $this->name;
+		return true;
 	}
 
-	public function setName($name) 
+	public function getNome() 
 	{
-		$this->name = $name;
+		return $this->nome;
+	}
+
+	public function setNome($nome) 
+	{
+		$this->nome = addslashes($nome);
 		return $this;
 	}
 
@@ -40,6 +47,10 @@ class Usuario extends Entity implements EntityContract
 
 	public function setEmail($email) 
 	{
+		if (!Util::validaEmail($email)) {
+			throw new Exception('E-mail inválido!');
+		}
+
 		$this->email = $email;
 		return $this;
 	}
@@ -51,7 +62,8 @@ class Usuario extends Entity implements EntityContract
 
 	public function setSenha($senha) 
 	{
-		$this->senha = MD5(self::$salt.$senha);
+		$s = addslashes($senha);
+		$this->senha = MD5(self::$salt.$s);
 		return $this;
 	}
 
@@ -73,7 +85,7 @@ class Usuario extends Entity implements EntityContract
 
 	public function setDhCadastro($dhCadastro) 
 	{
-		$this->dh_cadastro = $dhCadastro;
+		$this->dh_cadastro = Util::formataData($dhCadastro);
 		return $this;
 	}
 }

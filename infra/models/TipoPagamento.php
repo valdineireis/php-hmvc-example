@@ -16,7 +16,16 @@ class TipoPagamento extends Entity implements EntityContract
 
 	public function setNome($nome) 
 	{
-		$this->nome = $nome;
+		$this->nome = Util::normaliza($nome);
 		return $this;
+	}
+
+	public function isValido()
+	{
+		if (!empty($this->id) && Util::isNumero($this->id) && !empty($this->nome)) {
+			return true;
+		}
+
+		return false;
 	}
 }

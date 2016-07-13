@@ -12,6 +12,11 @@ class Produto extends Entity implements EntityContract
 		return "loja_produtos";
 	}
 
+	public function isValido()
+	{
+		return true;
+	}
+
 	public function getNome() 
 	{
 		return $this->nome;

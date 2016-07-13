@@ -12,10 +12,10 @@ class HomeController extends Controller
 	public function index() 
 	{
 		$usuario = new Usuario();
-		$usuario->setName('Valdinei');
+		$usuario->setNome('Valdinei');
 
 		$dados = array(
-			'name' => $usuario->getName(),
+			'name' => $usuario->getNome(),
 			'usuarios' => $this->usuarioRepository->select()
 		);
 
