@@ -66,21 +66,7 @@ class Venda extends Entity implements EntityContract
 		$this->setLinkPagamento('');
 
 		// Adiciona a venda no bando de dados
-		$vid = $this->vendaRepository->adiciona(
-						$this->getTipoPagamento()->getId(), 
-						$this->getUsuario()->getId(), 
-						$this->getValor(), 
-						$this->getStatusPagamento(), 
-						$this->getLinkPagamento(), 
-						$this->getUf(), 
-						$this->getCep(), 
-						$this->getCidade(), 
-						$this->getBairro(), 
-						$this->getLogradouro(), 
-						$this->getNumero(), 
-						$this->getComplemento()
-		);
-		$this->setId($vid);
+		$this->registraVenda();
 
 		// Verifica a forma de pagamento para integração
 		if($this->getTipoPagamento()->getId() == '1') {
@@ -109,19 +95,12 @@ class Venda extends Entity implements EntityContract
 				$this->setLinkPagamento($paymentRequest->register($cred));
 
 			} catch (PagSeguroServiceException $e) {
-				echo $e->getMessage();
+				throw new Exception("Erro de integração com o PagSeguro. ".$e->getMessage());
 			}
 		}
 
-		// Atualiza o status da venda
-		$this->vendaRepository->atualizaStatus($this->getId(), $this->getStatusPagamento(), $this->getLinkPagamento());
-
-		// Insere os produtos no banco de dados
-		if (is_array($produtos) && count($produtos) > 0) {
-			foreach ($produtos as $prod) {
-				$this->vendaProdutoRepository->adiciona($this->getId(), $prod->id, 1);
-			}
-		}
+		$this->atualizaStatusVenda();
+		$this->registraItensVenda($produtos);
 	}
 
 	public function setValor($valor)
@@ -265,5 +244,38 @@ class Venda extends Entity implements EntityContract
 	{
 		$this->dh_cadastro = Util::formataData($dhCadastro);
 		return $this;
+	}
+
+	private function registraVenda()
+	{
+		$vid = $this->vendaRepository->adiciona(
+						$this->getTipoPagamento()->getId(), 
+						$this->getUsuario()->getId(), 
+						$this->getValor(), 
+						$this->getStatusPagamento(), 
+						$this->getLinkPagamento(), 
+						$this->getUf(), 
+						$this->getCep(), 
+						$this->getCidade(), 
+						$this->getBairro(), 
+						$this->getLogradouro(), 
+						$this->getNumero(), 
+						$this->getComplemento()
+		);
+		$this->setId($vid);
+	}
+
+	private function atualizaStatusVenda()
+	{
+		$this->vendaRepository->atualizaStatus($this->getId(), $this->getStatusPagamento(), $this->getLinkPagamento());
+	}
+
+	private function registraItensVenda($produtos = array())
+	{
+		if (is_array($produtos) && count($produtos) > 0) {
+			foreach ($produtos as $prod) {
+				$this->vendaProdutoRepository->adiciona($this->getId(), $prod->id, 1);
+			}
+		}
 	}
 }
