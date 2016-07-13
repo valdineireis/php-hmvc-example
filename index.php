@@ -15,7 +15,7 @@ spl_autoload_register(function ($class)
 		require_once 'infra/models/'.$class.'.php';
 	} else if (file_exists('infra/repositories/'.$class.'.php')) {
 		require_once 'infra/repositories/'.$class.'.php';
-	} else {
+	} else if (file_exists('core/'.$class.'.php')) {
 		require_once 'core/'.$class.'.php';
 	}
 });
