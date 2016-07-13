@@ -6,11 +6,17 @@ class HomeController extends Controller
 	private $tipoPagamentoRepository;
 	private $usuarioRepository;
 
+	private $vendaRepository;
+	private $vendaProdutoRepository;
+
 	public function __construct() 
 	{
 		$this->produtoRepository = new ProdutoRepository();
 		$this->tipoPagamentoRepository = new TipoPagamentoRepository();
 		$this->usuarioRepository = new UsuarioRepository();
+
+		$this->vendaRepository = new VendaRepository();
+		$this->vendaProdutoRepository = new VendaProdutoRepository();
 	}
 
 	public function index()
@@ -144,7 +150,9 @@ class HomeController extends Controller
 						  ->setValor($subtotal);
 
 					if ($venda->isValido()) {
-						$venda->finaliza($prods);
+						$vendaService = new VendaService($venda, $this->vendaRepository, $this->vendaProdutoRepository);
+						//$venda->finaliza($prods);
+						$vendaService->registra($prods);
 
 						$link = $venda->getLinkPagamento();
 

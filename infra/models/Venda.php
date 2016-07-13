@@ -2,9 +2,6 @@
 
 class Venda extends Entity implements EntityContract
 {
-	private $vendaRepository;
-	private $vendaProdutoRepository;
-
 	private $valor;
 	private $status_pagamento;
 	private $link_pagamento;
@@ -26,9 +23,6 @@ class Venda extends Entity implements EntityContract
 		$this->tipoPagamento = new TipoPagamento();
 		$this->usuario = new Usuario();
 		$this->setDhCadastro(date('d-m-Y H:i:s'));
-
-		$this->vendaRepository = new VendaRepository();
-		$this->vendaProdutoRepository = new VendaProdutoRepository();
 	}
 
 	public final static function getTableName() 
@@ -51,56 +45,6 @@ class Venda extends Entity implements EntityContract
 		}
 
 		return false;
-	}
-
-	public function finaliza($produtos = array())
-	{
-		global $config;
-
-		/*
-		1 => Aguardando Pgto.
-		2 => Aprovado
-		3 => Cancelado
-		*/
-		$this->setStatusPagamento('1');
-		$this->setLinkPagamento('');
-
-		// Adiciona a venda no bando de dados
-		$this->registraVenda();
-
-		// Verifica a forma de pagamento para integração
-		if($this->getTipoPagamento()->getId() == '1') {
-			$this->setStatusPagamento('2');
-			$this->setLinkPagamento('/checkout/home/obrigado');
-		} elseif ($this->getTipoPagamento()->getId() == '2') {
-			// Pagseguro
-			require 'infra/libraries/PagSeguroLibrary/PagSeguroLibrary.php';
-
-			$paymentRequest = new PagSeguroPaymentRequest();
-			
-			if (is_array($produtos) && count($produtos) > 0) {
-				foreach ($produtos as $prod) {
-					$paymentRequest->addItem($prod->id, $prod->nome, 1, $prod->preco);
-				}
-			}
-
-			$paymentRequest->setCurrency("BRL");
-			$paymentRequest->setReference($this->getId());
-			$paymentRequest->setRedirectUrl($config["site_path"]."/checkout/home/obrigado");
-			$paymentRequest->addParameter("notificationURL", $config["site_path"]."/checkout/home/notificacao");
-
-			try {
-
-				$cred = PagSeguroConfig::getAccountCredentials();
-				$this->setLinkPagamento($paymentRequest->register($cred));
-
-			} catch (PagSeguroServiceException $e) {
-				throw new Exception("Erro de integração com o PagSeguro. ".$e->getMessage());
-			}
-		}
-
-		$this->atualizaStatusVenda();
-		$this->registraItensVenda($produtos);
 	}
 
 	public function setValor($valor)
@@ -244,38 +188,5 @@ class Venda extends Entity implements EntityContract
 	{
 		$this->dh_cadastro = Util::formataData($dhCadastro);
 		return $this;
-	}
-
-	private function registraVenda()
-	{
-		$vid = $this->vendaRepository->adiciona(
-						$this->getTipoPagamento()->getId(), 
-						$this->getUsuario()->getId(), 
-						$this->getValor(), 
-						$this->getStatusPagamento(), 
-						$this->getLinkPagamento(), 
-						$this->getUf(), 
-						$this->getCep(), 
-						$this->getCidade(), 
-						$this->getBairro(), 
-						$this->getLogradouro(), 
-						$this->getNumero(), 
-						$this->getComplemento()
-		);
-		$this->setId($vid);
-	}
-
-	private function atualizaStatusVenda()
-	{
-		$this->vendaRepository->atualizaStatus($this->getId(), $this->getStatusPagamento(), $this->getLinkPagamento());
-	}
-
-	private function registraItensVenda($produtos = array())
-	{
-		if (is_array($produtos) && count($produtos) > 0) {
-			foreach ($produtos as $prod) {
-				$this->vendaProdutoRepository->adiciona($this->getId(), $prod->id, 1);
-			}
-		}
 	}
 }
