@@ -62,8 +62,8 @@ class Venda extends Entity implements EntityContract
 		2 => Aprovado
 		3 => Cancelado
 		*/
-		$status = '1';
-		$link = '';
+		$this->setStatusPagamento('1');
+		$this->setLinkPagamento('');
 
 		// Adiciona a venda no bando de dados
 		$vid = $this->vendaRepository->adiciona(
@@ -84,8 +84,8 @@ class Venda extends Entity implements EntityContract
 
 		// Verifica a forma de pagamento para integração
 		if($this->getTipoPagamento()->getId() == '1') {
-			$status = '2';
-			$link = '/checkout/home/obrigado';
+			$this->setStatusPagamento('2');
+			$this->setLinkPagamento('/checkout/home/obrigado');
 		} elseif ($this->getTipoPagamento()->getId() == '2') {
 			// Pagseguro
 			require 'infra/libraries/PagSeguroLibrary/PagSeguroLibrary.php';
@@ -99,22 +99,19 @@ class Venda extends Entity implements EntityContract
 			}
 
 			$paymentRequest->setCurrency("BRL");
-			$paymentRequest->setReference($this-getId());
+			$paymentRequest->setReference($this->getId());
 			$paymentRequest->setRedirectUrl($config["site_path"]."/checkout/home/obrigado");
 			$paymentRequest->addParameter("notificationURL", $config["site_path"]."/checkout/home/notificacao");
 
 			try {
 
 				$cred = PagSeguroConfig::getAccountCredentials();
-				$link = $paymentRequest->register($cred);
+				$this->setLinkPagamento($paymentRequest->register($cred));
 
 			} catch (PagSeguroServiceException $e) {
 				echo $e->getMessage();
 			}
 		}
-
-		$this->setLinkPagamento($link);
-		$this->setStatusPagamento($status);
 
 		// Atualiza o status da venda
 		$this->vendaRepository->atualizaStatus($this->getId(), $this->getStatusPagamento(), $this->getLinkPagamento());
