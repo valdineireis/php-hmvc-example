@@ -55,6 +55,8 @@ class Venda extends Entity implements EntityContract
 
 	public function finaliza($produtos = array())
 	{
+		global $config;
+
 		/*
 		1 => Aguardando Pgto.
 		2 => Aprovado
@@ -63,18 +65,7 @@ class Venda extends Entity implements EntityContract
 		$status = '1';
 		$link = '';
 
-		if($this->getTipoPagamento()->getId() == '1') {
-			$status = '2';
-			$link = '/checkout/home/obrigado';
-		} else {
-
-			// Integração com Pagamentos...
-
-		}
-
-		$this->setLinkPagamento($link);
-		$this->setStatusPagamento($status);
-
+		// Adiciona a venda no bando de dados
 		$vid = $this->vendaRepository->adiciona(
 						$this->getTipoPagamento()->getId(), 
 						$this->getUsuario()->getId(), 
@@ -91,6 +82,44 @@ class Venda extends Entity implements EntityContract
 		);
 		$this->setId($vid);
 
+		// Verifica a forma de pagamento para integração
+		if($this->getTipoPagamento()->getId() == '1') {
+			$status = '2';
+			$link = '/checkout/home/obrigado';
+		} elseif ($this->getTipoPagamento()->getId() == '2') {
+			// Pagseguro
+			require 'infra/libraries/PagSeguroLibrary/PagSeguroLibrary.php';
+
+			$paymentRequest = new PagSeguroPaymentRequest();
+			
+			if (is_array($produtos) && count($produtos) > 0) {
+				foreach ($produtos as $prod) {
+					$paymentRequest->addItem($prod->id, $prod->nome, 1, $prod->preco);
+				}
+			}
+
+			$paymentRequest->setCurrency("BRL");
+			$paymentRequest->setReference($this-getId());
+			$paymentRequest->setRedirectUrl($config["site_path"]."/checkout/home/obrigado");
+			$paymentRequest->addParameter("notificationURL", $config["site_path"]."/checkout/home/notificacao");
+
+			try {
+
+				$cred = PagSeguroConfig::getAccountCredentials();
+				$link = $paymentRequest->register($cred);
+
+			} catch (PagSeguroServiceException $e) {
+				echo $e->getMessage();
+			}
+		}
+
+		$this->setLinkPagamento($link);
+		$this->setStatusPagamento($status);
+
+		// Atualiza o status da venda
+		$this->vendaRepository->atualizaStatus($this->getId(), $this->getStatusPagamento(), $this->getLinkPagamento());
+
+		// Insere os produtos no banco de dados
 		if (is_array($produtos) && count($produtos) > 0) {
 			foreach ($produtos as $prod) {
 				$this->vendaProdutoRepository->adiciona($this->getId(), $prod->id, 1);
