@@ -150,9 +150,8 @@ class HomeController extends Controller
 						  ->setValor($subtotal);
 
 					if ($venda->isValido()) {
-						$vendaService = new VendaService($venda, $this->vendaRepository, $this->vendaProdutoRepository);
-						//$venda->finaliza($prods);
-						$vendaService->registra($prods);
+						$vendaService = new VendaService($this->vendaRepository, $this->vendaProdutoRepository);
+						$vendaService->registra($venda, $prods);
 
 						$link = $venda->getLinkPagamento();
 

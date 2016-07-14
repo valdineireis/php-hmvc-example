@@ -44,14 +44,20 @@ class VendaRepository extends RepositoryBase
 
 	public function atualizaStatus($idVenda, $status, $link)
 	{
-		$sql = "UPDATE {$this->entity} SET 
-					status_pagamento = :status_pagamento, 
-					link_pagamento = :link_pagamento
-				WHERE id = :id_venda";
+		$sql = "UPDATE {$this->entity} SET ";
 
-		$sql = self::getConnection()->prepare($sql);
+		if (!empty($link)) {
+			$sql .= "status_pagamento = :status_pagamento, link_pagamento = :link_pagamento
+					WHERE id = :id_venda";
+			$sql = self::getConnection()->prepare($sql);
+			$sql->bindParam(':link_pagamento', $link);
+		} else {
+			$sql .= "status_pagamento = :status_pagamento
+					WHERE id = :id_venda";
+			$sql = self::getConnection()->prepare($sql);
+		}
+
 		$sql->bindParam(':status_pagamento', $status);
-		$sql->bindParam(':link_pagamento', $link);
 		$sql->bindParam(':id_venda', $idVenda);
 		$sql->execute();
 	}

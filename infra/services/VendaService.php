@@ -11,24 +11,24 @@ class VendaService
 	private $vendaProdutoRepository;
 
 	/*
-	 * @param Venda $venda Objeto que contém os campos de uma venda
 	 * @param VendaRepository $vendaRepository
 	 * @param VendaProdutoRepository $vendaProdutoRepository
 	 */
-	public function __construct($venda, $vendaRepository, $vendaProdutoRepository)
+	public function __construct($vendaRepository, $vendaProdutoRepository)
 	{
-		if (!is_object($venda) || $venda == null) {
-			throw new Exception("Objeto venda inválido!");
-		}
-
-		$this->venda = $venda;
 		$this->vendaRepository = $vendaRepository;
 		$this->vendaProdutoRepository = $vendaProdutoRepository;
 	}
 
-	public function registra($produtos = array())
+	public function registra($venda, $produtos = array())
 	{
 		global $config;
+
+		if (!is_object($venda) || $venda == null) {
+			throw new Exception("Objeto Venda inválido!");
+		}
+
+		$this->venda = $venda;
 
 		/*
 		1 => Aguardando Pgto.
@@ -46,7 +46,7 @@ class VendaService
 			$this->venda->setStatusPagamento('2');
 			$this->venda->setLinkPagamento('/checkout/home/obrigado');
 		} elseif ($this->venda->getTipoPagamento()->getId() == '2') {
-			// Pagseguro
+			// PagSeguro
 			require 'infra/libraries/PagSeguroLibrary/PagSeguroLibrary.php';
 
 			$paymentRequest = new PagSeguroPaymentRequest();
@@ -60,7 +60,7 @@ class VendaService
 			$paymentRequest->setCurrency("BRL");
 			$paymentRequest->setReference($this->venda->getId());
 			$paymentRequest->setRedirectUrl($config["site_path"]."/checkout/home/obrigado");
-			$paymentRequest->addParameter("notificationURL", $config["site_path"]."/checkout/home/notificacao");
+			$paymentRequest->addParameter("notificationURL", $config["site_path"]."/checkout/notificacao/pagseguro");
 
 			try {
 
@@ -74,6 +74,50 @@ class VendaService
 
 		$this->atualizaStatusVenda();
 		$this->registraItensVenda($produtos);
+	}
+
+	public function verificaVendasPagSeguro($notificationCode = '', $notificationType = '')
+	{
+		require 'infra/libraries/PagSeguroLibrary/PagSeguroLibrary.php';
+
+		if (!empty($notificationCode) && !empty($notificationType)) {
+			$notificationCode = trim($notificationCode);
+			$notificationType = trim($notificationType);
+
+			$psNotificationType = new PagSeguroNotificationType($notificationType);
+			$strType = $psNotificationType->getTypeFromValue();
+
+			$credentials = PagSeguroConfig::getAccountCredentials();
+
+			try {
+
+				$transaction = PagSeguroNotificationService::checkTransaction($credentials, $notificationCode);
+				$ref = $transaction->getReference();
+				$status = $transaction->getStatus()->getValues();
+
+				$novoStatus = 0;
+				switch ($status) {
+					case '1': // Aguardando Pagamento
+					case '2': // Em análise
+						$novoStatus = '1';
+						break;
+					case '3': // Pagamento aprovado
+					case '4': // Disponível
+						$novoStatus = '2';
+						break;
+					case '6': // Devolvida
+					case '7': // Cancelada
+						$novoStatus = '3';
+						break;
+				}
+
+				$this->venda->setStatusPagamento($novoStatus);
+				$this->atualizaStatusVenda();
+
+			} catch (PagSeguroServiceException $e) {
+				throw new Exception("Erro na verificação da venda. ".$e->getMessage());
+			}
+		}
 	}
 
 	private function registraVenda()
