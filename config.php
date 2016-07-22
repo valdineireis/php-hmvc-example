@@ -18,4 +18,10 @@ if (ENVIRONMENT == 'development') {
 	$config['dbuser'] = 'root';
 	$config['dbpass'] = 'root';
 }
+
+$config['status_pagamento'] = array(
+	'1' => 'Aguardando Pgto.',
+	'2' => 'Aprovado',
+	'3' => 'Cancelado'
+);
 ?>
