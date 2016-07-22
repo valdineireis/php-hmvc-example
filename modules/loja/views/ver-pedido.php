@@ -1,9 +1,7 @@
 <?php
 global $config;
 ?>
-<h1>Meus Pedidos</h1>
-
-<a href="/loja/login/logout">Sair</a>
+<h1>Meu Pedido</h1>
 
 <table border=1>
 	<tr>
@@ -11,17 +9,22 @@ global $config;
 		<th>Valor Pago</th>
 		<th>Forma de Pgto</th>
 		<th>Status do Pgto</th>
-		<th>Ações</th>
 	</tr>
-	<?php foreach ($pedidos as $pedido): ?>
 	<tr>
 		<td><?php echo $pedido->id; ?></td>
 		<td>R$ <?php echo $pedido->valor; ?></td>
 		<td><?php echo $pedido->tipopgto; ?></td>
 		<td><?php echo $config['status_pagamento'][$pedido->status_pagamento]; ?></td>
-		<td><a href="/loja/pedidos/ver/<?php echo $pedido->id; ?>">Detalhes</a></td>
 	</tr>
-	<?php endforeach; ?>
 </table>
 
+<hr/>
 
+<?php foreach ($produtos as $produto): ?>
+	<div class="box-loja">
+		<img src="" alt="<?php echo utf8_encode($produto->nome) ?>" /><br>
+		<?php echo utf8_encode($produto->nome) ?><br>
+		<?php echo 'R$ '.$produto->preco ?><br>
+		<?php echo $produto->quantidade ?>
+	</div>
+<?php endforeach; ?>

@@ -2,9 +2,12 @@
 
 class ProdutoRepository extends RepositoryBase
 {
+	private $tbl_vendas_produtos;
+
 	public function __construct() 
 	{
 		parent::__construct(Produto::getTableName());
+		$this->tbl_vendas_produtos = VendaProduto::getTableName();
 	}
 
 	/**
@@ -52,5 +55,33 @@ class ProdutoRepository extends RepositoryBase
 		}
 
 		return $produto;
+	}
+
+	public function getProdutosPorVendaId($idVenda)
+	{
+		$array = array();
+
+		if (!empty($idVenda)) {
+			
+			$sql = "SELECT 
+					{$this->tbl_vendas_produtos}.quantidade, 
+					{$this->tbl_vendas_produtos}.id_produto, 
+					{$this->entity}.nome, 
+					{$this->entity}.imagem, 
+					{$this->entity}.preco 
+					FROM {$this->entity} INNER JOIN {$this->tbl_vendas_produtos}
+						ON {$this->tbl_vendas_produtos}.id_produto = {$this->entity}.id
+					WHERE {$this->tbl_vendas_produtos}.id_venda = :idVenda ";
+
+			$sql = self::getConnection()->prepare($sql);
+			$sql->bindParam(':idVenda', $idVenda);
+			$sql->execute();
+
+			if ($sql->rowCount() > 0) {
+				$array = $sql->fetchAll(PDO::FETCH_OBJ);
+			}
+		}
+
+		return $array;
 	}
 }

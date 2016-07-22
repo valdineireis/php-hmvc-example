@@ -2,9 +2,57 @@
 
 class VendaRepository extends RepositoryBase
 {
+	private $tbl_tipos_pagamentos;
+
 	public function __construct() 
 	{
 		parent::__construct(Venda::getTableName());
+		$this->tbl_tipos_pagamentos = TipoPagamento::getTableName();
+	}
+
+	public function getPorId($idPedido, $idUsuario)
+	{
+		$array = array();
+
+		if (!empty($idUsuario)) {
+
+			$sql = "SELECT 
+						*, 
+						(SELECT {$this->tbl_tipos_pagamentos}.nome 
+						FROM {$this->tbl_tipos_pagamentos} 
+						WHERE {$this->tbl_tipos_pagamentos}.id = {$this->entity}.id_tipo_pagamento) as tipopgto 
+					FROM {$this->entity} WHERE id = :id AND id_usuario = :idUsuario ";
+			$sql = self::getConnection()->prepare($sql);
+			$sql->bindParam(':id', $idPedido);
+			$sql->bindParam(':idUsuario', $idUsuario);
+			$sql->execute();
+
+			if ($sql->rowCount() > 0) {
+				$array = $sql->fetch(PDO::FETCH_OBJ);
+			}
+		}
+
+		return $array;
+	}
+
+	public function getPedidosDoUsuario($idUsuario)
+	{
+		$array = array();
+
+		if (!empty($idUsuario)) {
+
+			$sql = "SELECT *, (SELECT {$this->tbl_tipos_pagamentos}.nome FROM {$this->tbl_tipos_pagamentos} WHERE {$this->tbl_tipos_pagamentos}.id = {$this->entity}.id_tipo_pagamento) as tipopgto FROM {$this->entity} WHERE id_usuario = :id ";
+			$sql = self::getConnection()->prepare($sql);
+			$sql->bindParam(':id', $idUsuario);
+			$sql->execute();
+
+			if ($sql->rowCount() > 0) {
+				$array = $sql->fetchAll(PDO::FETCH_OBJ);
+			}
+
+		}
+
+		return $array;
 	}
 
 	public function adiciona($idTipoPagamento, $idUsuario, $valor, $status, $link, $uf, $cep, $cidade, $bairro, $logradouro, $numero, $complemento)
