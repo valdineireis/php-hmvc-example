@@ -14,6 +14,7 @@ class Core
 	public function __construct() 
 	{
 		require_once 'core/Controller.php';
+		require_once 'core/AdminController.php';
 		$this->currentController = 'HomeController';
 		$this->currentAction = 'index';
 		$this->params = array();

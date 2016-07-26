@@ -1,16 +1,10 @@
 <?php
 
-class HomeController extends Controller
+class HomeController extends AdminController
 {
 	public function __construct() 
 	{
-		parent::__construct('admin');
-
-		$security = new SecurityAdmin(null);
-
-		if ($security->isLogged() == false) {
-			header("Location: /painel/login");
-		}
+		parent::__construct();
 	}
 
 	public function index() 
