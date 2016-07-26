@@ -36,6 +36,24 @@ class UsuarioRepository extends RepositoryBase
 		return false;
 	}
 
+	public function login($email, $senha) 
+	{
+		$id = 0;
+
+		$sql = "SELECT id FROM {$this->entity} WHERE ativo = true AND perfil = 'admin' AND email = :email AND senha = :senha";
+		$sql = self::getConnection()->prepare($sql);
+		$sql->bindParam(':email', $email);
+		$sql->bindParam(':senha', $senha);
+		$sql->execute();
+
+		if ($sql->rowCount() > 0) {
+			$sql = $sql->fetch();
+			$id = $sql['id'];
+		}
+
+		return $id;
+	}
+
 	public function getId($email) 
 	{
 		$id = 0;
