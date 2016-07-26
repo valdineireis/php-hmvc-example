@@ -6,6 +6,8 @@
 		<link type="text/css" rel="stylesheet" href="/templates/default/assets/css/style.css" media="all" />
 	</head>
 	<body>
+		<a href="/">Página inicial</a> | <a href="/loja">Loja</a> | <a href="/checkout">Carrinho</a>
+		<hr>
 		<?php $this->loadViewInTemplate($viewName, $viewData); ?>
 	</body>
 </html>

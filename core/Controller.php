@@ -2,6 +2,13 @@
 
 abstract class Controller
 {
+	protected $template;
+
+	public function __construct($nomeTemplate = 'default')
+	{
+		$this->template = $nomeTemplate;
+	}
+
 	public function loadView($viewName, $viewData = array()) 
 	{
 		global $currentModule;
@@ -11,7 +18,7 @@ abstract class Controller
 
 	public function loadTemplate($viewName, $viewData = array()) 
 	{
-		include 'templates/default/index.php';
+		include 'templates/'.$this->template.'/index.php';
 	}
 
 	public function loadViewInTemplate($viewName, $viewData) 

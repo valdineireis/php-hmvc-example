@@ -11,6 +11,8 @@ class HomeController extends Controller
 
 	public function __construct() 
 	{
+		parent::__construct();
+
 		$this->produtoRepository = new ProdutoRepository();
 		$this->tipoPagamentoRepository = new TipoPagamentoRepository();
 		$this->usuarioRepository = new UsuarioRepository();

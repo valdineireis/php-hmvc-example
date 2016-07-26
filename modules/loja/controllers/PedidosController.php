@@ -7,6 +7,7 @@ class PedidosController extends Controller
 
 	public function __construct() 
 	{
+		parent::__construct();
 		$this->vendaRepository = new VendaRepository();
 		$this->produtoRepository = new ProdutoRepository();
 	}
