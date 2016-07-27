@@ -14,10 +14,13 @@
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<style>
-	.starter-template {
-		padding: 40px 15px;
-		text-align: center;
-	}
+		body {
+		  padding-top: 50px;
+		}
+		.starter-template {
+		  padding: 40px 15px;
+		  text-align: center;
+		}
 	</style>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -38,12 +41,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="javascript:void(0);">Project name</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#categorias">Categorias</a></li>
+            <li><a href="/painel">Home</a></li>
+            <li><a href="/painel/categorias">Categorias</a></li>
             <li><a href="#produtos">Produtos</a></li>
             <li><a href="#vendas">Vendas</a></li>
             <li><a href="#usuarios">Usuários</a></li>
