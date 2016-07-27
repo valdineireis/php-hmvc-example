@@ -81,4 +81,22 @@ abstract class RepositoryBase
 
 		return $result;
 	}
+
+	public function getById($id) 
+	{
+		$result = array();
+
+		if (is_numeric($id) && $id > 0) {
+			$sql = "SELECT * FROM {$this->entity} WHERE id = :id";
+			$sql = self::getConnection()->prepare($sql);
+			$sql->bindParam(':id', $id);
+			$sql->execute();
+
+			if ($sql->rowCount() > 0) {
+				$result = $sql->fetch(PDO::FETCH_OBJ);
+			}
+		}
+
+		return $result;
+	}
 }
