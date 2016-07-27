@@ -43,8 +43,7 @@ class CategoriasController extends AdminController
 		if(isset($_POST['nome']) && is_numeric($id) && $id > 0) {
 
 			$categoria = new Categoria();
-			$categoria->setNome($_POST['nome'])
-					  ->setId($id);
+			$categoria->setNome($_POST['nome']);
 
 			$this->categoriaRepository->edita($categoria->getNome(), $id);
 

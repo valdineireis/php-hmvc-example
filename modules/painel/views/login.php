@@ -1,6 +1,6 @@
 <form class="form-signin" method="post">
 
-	<h2 class="form-signin-heading">Login</h2>
+	<h2 class="form-signin-heading">Login do Painel</h2>
 
 	<?php if (!empty($aviso)): ?>
 		<div class="alert alert-danger" role="alert"><?php echo $aviso; ?></div>
