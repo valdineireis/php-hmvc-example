@@ -3,11 +3,33 @@
 class ProdutoRepository extends RepositoryBase
 {
 	private $tbl_vendas_produtos;
+	private $tbl_categorias;
 
 	public function __construct() 
 	{
 		parent::__construct(Produto::getTableName());
 		$this->tbl_vendas_produtos = VendaProduto::getTableName();
+		$this->tbl_categorias = Categoria::getTableName();
+	}
+
+	public function select()
+	{
+		$produtos = array();
+
+		$sql = "SELECT 
+					*, 
+					(SELECT {$this->tbl_categorias}.nome 
+						FROM {$this->tbl_categorias} 
+						WHERE {$this->tbl_categorias}.id = {$this->entity}.id_categoria) as categoria 
+				FROM {$this->entity} ";
+		$sql = self::getConnection()->prepare($sql);
+		$sql->execute();
+
+		if ($sql->rowCount() > 0) {
+			$produtos = $sql->fetchAll(PDO::FETCH_OBJ);
+		}
+
+		return $produtos;
 	}
 
 	/**

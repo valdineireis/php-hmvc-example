@@ -5,6 +5,7 @@ class Produto extends Entity implements EntityContract
 	private $nome;
 	private $preco;
 	private $imagem;
+	private $quantidade;
 	private $descricao;
 
 	public final static function getTableName() 
@@ -47,6 +48,17 @@ class Produto extends Entity implements EntityContract
 	public function setImagem($imagem) 
 	{
 		$this->imagem = $imagem;
+		return $this;
+	}
+
+	public function getQuantidade() 
+	{
+		return $this->quantidade;
+	}
+
+	public function setQuantidade($quantidade) 
+	{
+		$this->quantidade = $quantidade;
 		return $this;
 	}
 
