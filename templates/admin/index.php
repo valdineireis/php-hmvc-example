@@ -47,7 +47,7 @@
           <ul class="nav navbar-nav">
             <li><a href="/painel">Home</a></li>
             <li><a href="/painel/categorias">Categorias</a></li>
-            <li><a href="#produtos">Produtos</a></li>
+            <li><a href="/painel/produtos">Produtos</a></li>
             <li><a href="#vendas">Vendas</a></li>
             <li><a href="#usuarios">Usuários</a></li>
           </ul>

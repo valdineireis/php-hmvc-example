@@ -99,4 +99,20 @@ abstract class RepositoryBase
 
 		return $result;
 	}
+
+	public function totalRows() 
+	{
+		$result = 0;
+
+		$sql = "SELECT COUNT(*) AS quantidade FROM {$this->entity}";
+		$sql = self::getConnection()->prepare($sql);
+		$sql->execute();
+
+		if ($sql->rowCount() > 0) {
+			$result = $sql->fetch();
+			$result = $result['quantidade'];
+		}
+
+		return $result;
+	}
 }

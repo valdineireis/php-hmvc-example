@@ -13,8 +13,17 @@ class ProdutosController extends AdminController
 	public function index() 
 	{
 		$dados = array();
+		$offset = 0;
+		$limit = 10;
 
-		$dados['produtos'] = $this->produtoRepository->select();
+		if (isset($_GET['p']) && !empty($_GET['p'])) {
+			$p = addslashes($_GET['p']);
+			$offset = ($limit * $p) - $limit;
+		}
+
+		$dados['total_produtos'] = $this->produtoRepository->totalRows();
+		$dados['limit_produtos'] = $limit;
+		$dados['produtos'] = $this->produtoRepository->select($offset, $limit);
 
 		$this->loadTemplate('produtos', $dados);
 	}

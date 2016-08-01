@@ -12,7 +12,7 @@ class ProdutoRepository extends RepositoryBase
 		$this->tbl_categorias = Categoria::getTableName();
 	}
 
-	public function select()
+	public function select($offset, $limit)
 	{
 		$produtos = array();
 
@@ -21,8 +21,13 @@ class ProdutoRepository extends RepositoryBase
 					(SELECT {$this->tbl_categorias}.nome 
 						FROM {$this->tbl_categorias} 
 						WHERE {$this->tbl_categorias}.id = {$this->entity}.id_categoria) as categoria 
-				FROM {$this->entity} ";
+				FROM {$this->entity} 
+				LIMIT :offset, :limit ";
 		$sql = self::getConnection()->prepare($sql);
+		$sql->bindParam(':offset', $intervalo);
+		$sql->bindParam(':limit', $limite);
+		$intervalo = $offset;
+		$limite = $limit;
 		$sql->execute();
 
 		if ($sql->rowCount() > 0) {

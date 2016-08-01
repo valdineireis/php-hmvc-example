@@ -29,3 +29,13 @@
 	<?php endforeach; ?>
 	</tbody>
 </table>
+
+<nav>
+	<ul class="pagination">
+		<?php
+		$conta = ceil($total_produtos / $limit_produtos);
+		for ($q = 1; $q <= $conta; $q++): ?>
+			<li><a href="/painel/produtos?p=<?php echo $q; ?>"><?php echo $q; ?></a></li>
+		<?php endfor; ?>
+	</ul>
+</nav>
